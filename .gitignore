@@ -9,3 +9,22 @@ __pycache__/
 backend/data/*.db
 *.log
 .DS_Store
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python environments and cache
+venv/
+ENV/
+*.py[cod]
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Build and temporary files
+dist/
+build/
