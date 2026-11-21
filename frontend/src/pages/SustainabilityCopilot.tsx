@@ -30,6 +30,118 @@ interface ChatMessage {
   timestamp: string;
 }
 
+// Simple safe markdown block formatter
+const formatInline = (text: string) => {
+  const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+  return parts.map((part, idx) => {
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code key={idx} className="bg-charcoal-900 px-1 py-0.5 rounded text-emerald-300 font-mono text-[11px] border border-charcoal-750">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={idx} className="text-white font-semibold">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
+};
+
+const renderMarkdownContent = (content: string) => {
+  const lines = content.split('\n');
+  const renderedElements: React.ReactNode[] = [];
+  let tableRows: string[] = [];
+
+  const flushTable = (keyIdx: number) => {
+    if (tableRows.length === 0) return null;
+    const rows = tableRows.map(r => r.split('|').filter((_, i, arr) => i > 0 && i < arr.length - 1).map(c => c.trim()));
+    tableRows = [];
+    if (rows.length < 2) return null;
+
+    const headers = rows[0];
+    const dataRows = rows.slice(2); // Skip separator row
+
+    return (
+      <div key={`table-${keyIdx}`} className="overflow-x-auto my-2 rounded-lg border border-charcoal-750">
+        <table className="w-full text-left text-[11px]">
+          <thead className="bg-charcoal-900 text-charcoal-300 border-b border-charcoal-750 font-semibold">
+            <tr>
+              {headers.map((h, i) => (
+                <th key={i} className="py-1.5 px-2.5">{formatInline(h)}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-charcoal-800 font-sans">
+            {dataRows.map((row, rIdx) => (
+              <tr key={rIdx} className="hover:bg-charcoal-800/40">
+                {row.map((cell, cIdx) => (
+                  <td key={cIdx} className="py-1.5 px-2.5">{formatInline(cell)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      tableRows.push(trimmed);
+      return;
+    } else if (tableRows.length > 0) {
+      const tbl = flushTable(idx);
+      if (tbl) renderedElements.push(tbl);
+    }
+
+    if (trimmed.startsWith('### ')) {
+      renderedElements.push(
+        <h3 key={idx} className="text-sm font-bold text-white mt-2 mb-1 flex items-center gap-1.5">
+          {formatInline(trimmed.slice(4))}
+        </h3>
+      );
+    } else if (trimmed.startsWith('#### ')) {
+      renderedElements.push(
+        <h4 key={idx} className="text-xs font-bold text-emerald-300 mt-2 mb-1">
+          {formatInline(trimmed.slice(5))}
+        </h4>
+      );
+    } else if (trimmed.startsWith('- ')) {
+      renderedElements.push(
+        <div key={idx} className="flex items-start gap-2 ml-1 text-xs">
+          <span className="text-emerald-400 mt-0.5">•</span>
+          <span className="text-charcoal-200">{formatInline(trimmed.slice(2))}</span>
+        </div>
+      );
+    } else if (/^\d+\.\s/.test(trimmed)) {
+      const match = trimmed.match(/^(\d+)\.\s(.*)/);
+      renderedElements.push(
+        <div key={idx} className="flex items-start gap-2 ml-1 text-xs">
+          <span className="font-mono text-emerald-400 font-bold">{match ? match[1] : '1'}.</span>
+          <span className="text-charcoal-200">{formatInline(match ? match[2] : trimmed)}</span>
+        </div>
+      );
+    } else if (trimmed === '') {
+      renderedElements.push(<div key={idx} className="h-1" />);
+    } else {
+      renderedElements.push(
+        <p key={idx} className="text-xs text-charcoal-200 leading-relaxed">
+          {formatInline(trimmed)}
+        </p>
+      );
+    }
+  });
+
+  if (tableRows.length > 0) {
+    const tbl = flushTable(lines.length);
+    if (tbl) renderedElements.push(tbl);
+  }
+
+  return renderedElements;
+};
+
 export const SustainabilityCopilot: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -193,8 +305,8 @@ How can I assist your sustainability audit today?`,
               }`}
             >
               {/* Message Content formatted */}
-              <div className="prose prose-invert prose-xs max-w-none space-y-2 whitespace-pre-wrap font-sans">
-                {m.content}
+              <div className="space-y-1.5 font-sans">
+                {renderMarkdownContent(m.content)}
               </div>
 
               {/* Citations Box */}

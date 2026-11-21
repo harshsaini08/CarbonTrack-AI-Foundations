@@ -49,6 +49,7 @@ export const api = {
 
   // Ingestion
   seedDemoData: () => request<any>('/ingestion/seed-demo', { method: 'POST' }),
+  getIngestedRecords: (limit: number = 15) => request<any[]>(`/ingestion/records?limit=${limit}`),
   
   uploadDataset: async (file: File) => {
     const formData = new FormData();

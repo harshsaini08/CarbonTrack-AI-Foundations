@@ -90,16 +90,16 @@ def run_fairness_assessment(db: Session, audit_id: int) -> Dict[str, Any]:
     def calc_fairness_score(row):
         perf = row["carbon_performance_score"]
         size = row["size"]
-        rank_gap = row["rank_delta"]
+        rank_gap = row["rank_delta"] # absolute_rank - normalized_rank (positive = improved when normalized)
         
         # Base fairness on performance and rank equity
         base = perf
         if size == "Small":
-            # If a small supplier has high performance but was penalized on absolute terms, equity boost
-            if rank_gap < -5:
+            # If a small supplier has high performance but was penalized on absolute terms, apply equity boost
+            if rank_gap > 4:
                 base += 8.0 # compensating for unfair absolute penalization
         elif size == "Large":
-            # If a large supplier has high absolute emissions but also high intensity, ensure no greenwashing
+            # If a large supplier has high absolute emissions and high intensity, ensure no greenwashing
             if row["intensity"] > peer_benchmarks[row["industry"]]["mean_intensity"]:
                 base -= 5.0
                 
@@ -112,24 +112,24 @@ def run_fairness_assessment(db: Session, audit_id: int) -> Dict[str, Any]:
 
     # 5. Detect Potential Bias & Explainability
     def evaluate_bias(row):
-        rank_gap = row["rank_delta"] # absolute_rank - normalized_rank
+        rank_gap = row["rank_delta"] # absolute_rank - normalized_rank (positive = gained positions)
         size = row["size"]
         intensity = row["intensity"]
         mean_i = peer_benchmarks[row["industry"]]["mean_intensity"]
         
-        if size == "Small" and rank_gap < -8:
+        if size == "Small" and rank_gap > 4:
             return (
                 "Unfairly Penalized (Scale Bias)",
-                f"Under absolute ranking, {row['name']} ranked #{row['absolute_rank']} due to low raw data visibility, "
+                f"Under traditional gross ranking, {row['name']} ranked #{row['absolute_rank']} due to low raw volume visibility, "
                 f"despite maintaining an efficient emission intensity ({intensity:.4f} tCO2e/unit vs peer mean {mean_i:.4f}). "
-                f"FairScore normalizes ranking to #{row['normalized_rank']} (+{abs(rank_gap)} rank equity adjustment)."
+                f"FairScore normalizes ranking to #{row['normalized_rank']} (+{rank_gap} rank equity recovery)."
             )
-        elif size == "Large" and rank_gap > 8:
+        elif size == "Large" and rank_gap < -4:
             return (
                 "Masked Inefficiency (Volume Bias)",
                 f"Ranked favorably at #{row['absolute_rank']} on absolute scale because production volume is moderate, "
                 f"but intensity ({intensity:.4f} tCO2e/unit) is worse than peer mean ({mean_i:.4f}). "
-                f"Normalized ranking falls to #{row['normalized_rank']}."
+                f"Normalized ranking falls to #{row['normalized_rank']} ({rank_gap} positions adjustment)."
             )
         elif row["is_flagged"] and size == "Small" and intensity <= mean_i:
             return (
@@ -138,6 +138,11 @@ def run_fairness_assessment(db: Session, audit_id: int) -> Dict[str, Any]:
                 f"meeting industry average standards."
             )
         else:
+            return (
+                "Neutral / Balanced",
+                f"Rankings reflect consistent operational metrics. Normalized rank #{row['normalized_rank']} "
+                f"aligns with carbon intensity benchmarks."
+            )
             return (
                 "Neutral / Balanced",
                 f"Rankings reflect consistent operational metrics. Normalized rank #{row['normalized_rank']} "

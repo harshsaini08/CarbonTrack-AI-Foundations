@@ -8,7 +8,7 @@ seeds default emission factors, and initializes ProofChain audit ledger.
 from sqlalchemy.orm import Session
 from app.models import (
     Organization, User, Supplier, OperationalRecord, EmissionFactor,
-    CarbonAudit, AuditFinding, FairnessAssessment, AuditEvidence
+    CarbonAudit, AuditFinding, FairnessAssessment, AuditEvidence, SimulationScenario
 )
 from app.services.carbon_calculator import DEFAULT_FACTORS, calculate_operational_emissions
 from app.services.auditor import run_carbon_audit
@@ -215,6 +215,7 @@ def seed_database_demo_data(db: Session, reset_existing: bool = True) -> dict:
     """
     if reset_existing:
         # Clear child tables first
+        db.query(SimulationScenario).delete()
         db.query(AuditEvidence).delete()
         db.query(AuditFinding).delete()
         db.query(FairnessAssessment).delete()
@@ -338,6 +339,39 @@ def seed_database_demo_data(db: Session, reset_existing: bool = True) -> dict:
     findings = db.query(AuditFinding).filter(AuditFinding.audit_id == audit.id).all()
     for f in findings:
         record_finding_evidence(db, f.id)
+
+    # 9. Seed default Saved Simulation Scenarios
+    scenarios = [
+        SimulationScenario(
+            name="2026 Fleet Rail Transition & Solar PPA",
+            description="Replaces road long-haul logistics with intermodal rail and achieves 50% solar renewable grid coverage.",
+            supplier_id=None,
+            target_transport_mode="Rail",
+            renewable_energy_ratio=50.0,
+            baseline_emissions=16776.0,
+            simulated_emissions=11641.1,
+            absolute_reduction=5134.9,
+            percentage_reduction=30.6,
+            estimated_cost_impact_usd=-42500.0,
+            recommendation_summary="Deploy 50% on-site solar/renewable PPA; Modal shift from Road to Rail logistics"
+        ),
+        SimulationScenario(
+            name="Vulcan Castings Induction Decarbonization",
+            description="Replaces legacy oil burners at S-101 with electric induction and heat recovery.",
+            supplier_id=created_suppliers[0].id if created_suppliers else None,
+            target_transport_mode="Road",
+            renewable_energy_ratio=30.0,
+            baseline_emissions=1420.0,
+            simulated_emissions=1050.8,
+            absolute_reduction=369.2,
+            percentage_reduction=26.0,
+            estimated_cost_impact_usd=-18200.0,
+            recommendation_summary="Process thermal optimization lowers diesel consumption by 25%"
+        )
+    ]
+    for sc in scenarios:
+        db.add(sc)
+    db.commit()
 
     return {
         "status": "success",

@@ -22,6 +22,7 @@ export const ProofChainAuditTrail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState(false);
   const [inspectBlock, setInspectBlock] = useState<ProofChainBlock | null>(null);
+  const [blockSearch, setBlockSearch] = useState('');
 
   useEffect(() => {
     loadChainData();
@@ -137,11 +138,23 @@ export const ProofChainAuditTrail: React.FC = () => {
 
       {/* Chain Timeline Visualizer */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between text-xs text-charcoal-400">
-          <span className="font-semibold text-white uppercase tracking-wider text-[11px]">
-            Audit Blocks & Evidence Trail ({blocks.length})
-          </span>
-          <span className="text-[11px]">Click any block to inspect raw cryptographic payload</span>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-charcoal-400">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-white uppercase tracking-wider text-[11px]">
+              Audit Blocks & Evidence Trail ({blocks.length})
+            </span>
+            <span className="text-[10px] text-charcoal-500">• Click block to inspect payload</span>
+          </div>
+
+          <div className="w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Search blocks, supplier, or hash..."
+              value={blockSearch}
+              onChange={(e) => setBlockSearch(e.target.value)}
+              className="w-full bg-charcoal-900 border border-charcoal-750 rounded-lg px-3 py-1.5 text-xs text-white placeholder-charcoal-500 focus:outline-none focus:border-emerald-500 font-medium"
+            />
+          </div>
         </div>
 
         {loading ? (
@@ -152,7 +165,18 @@ export const ProofChainAuditTrail: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-3">
-            {blocks.map((b) => (
+            {blocks
+              .filter((b) => {
+                if (!blockSearch) return true;
+                const s = blockSearch.toLowerCase();
+                return (
+                  String(b.sequence_index).includes(s) ||
+                  (b.supplier_name && b.supplier_name.toLowerCase().includes(s)) ||
+                  (b.issue_title && b.issue_title.toLowerCase().includes(s)) ||
+                  b.record_hash.toLowerCase().includes(s)
+                );
+              })
+              .map((b) => (
               <div
                 key={b.id}
                 onClick={() => setInspectBlock(b)}

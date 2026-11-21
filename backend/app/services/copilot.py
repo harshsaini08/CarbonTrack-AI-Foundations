@@ -63,6 +63,62 @@ def answer_copilot_query(db: Session, query: str) -> Dict[str, Any]:
             "Which small suppliers may be unfairly evaluated?"
         ]
 
+    # 1b. Cleanest / Lowest Emission Intensity Supplier Query
+    elif "cleanest" in q or ("lowest" in q and "intensity" in q) or "most efficient" in q:
+        sorted_records = sorted(records, key=lambda r: r.emission_intensity, ascending=True)
+        top_clean = sorted_records[0]
+        sup = top_clean.supplier
+        
+        answer = (
+            f"### Cleanest / Lowest Emission Intensity Supplier\n\n"
+            f"**{sup.name} ({sup.supplier_code})** operates with the cleanest unit carbon intensity across your entire supply chain:\n\n"
+            f"- **Carbon Intensity:** `{top_clean.emission_intensity:.4f} tCO2e / unit produced` (Portfolio Benchmark Winner)\n"
+            f"- **Enterprise Scale:** `{sup.size}` ({sup.industry})\n"
+            f"- **Production Output:** `{top_clean.production_volume:,.0f} units`\n"
+            f"- **Gross Footprint:** `{top_clean.calculated_total_emissions:.1f} tCO2e`\n"
+            f"- **Logistics Mode:** `{top_clean.transportation_mode}` ({top_clean.transportation_distance:.0f} km)\n\n"
+            f"Under **FAIRScore AI**, {sup.name} achieves Rank #1 for unit-level operational decarbonization."
+        )
+        citations.append({
+            "type": "SupplierRecord",
+            "supplier_code": sup.supplier_code,
+            "supplier_name": sup.name,
+            "metric": f"{top_clean.emission_intensity:.4f} tCO2e/unit"
+        })
+        followups = [
+            f"Why was Supplier {sup.supplier_code} ranked #1?",
+            "Which small suppliers may be unfairly evaluated?",
+            "Show the top five carbon hotspots"
+        ]
+
+    # 1c. Total Carbon Footprint & Scope Overview Query
+    elif "total" in q and ("emissions" in q or "footprint" in q or "carbon" in q):
+        total_em = sum(r.calculated_total_emissions for r in records)
+        s1 = sum(r.calculated_scope1 for r in records)
+        s2 = sum(r.calculated_scope2 for r in records)
+        s3 = sum(r.calculated_scope3 for r in records)
+        
+        answer = (
+            f"### Consolidated Enterprise Carbon Footprint (Scopes 1, 2, and 3)\n\n"
+            f"CarbonTrack has audited **{len(records)} active supplier facilities** across your global supply chain:\n\n"
+            f"| GHG Scope | Category Description | Gross Emissions | Share (%) |\n"
+            f"| :--- | :--- | :--- | :--- |\n"
+            f"| **Scope 1** | Direct Fuel & Stationary Combustion | `{s1:,.1f} tCO2e` | `{(s1/max(0.1, total_em))*100:.1f}%` |\n"
+            f"| **Scope 2** | Indirect Purchased Grid Electricity | `{s2:,.1f} tCO2e` | `{(s2/max(0.1, total_em))*100:.1f}%` |\n"
+            f"| **Scope 3** | Freight Logistics, Materials & Waste | `{s3:,.1f} tCO2e` | `{(s3/max(0.1, total_em))*100:.1f}%` |\n"
+            f"| **Total** | **Consolidated Portfolio Footprint** | **`{total_em:,.1f} tCO2e`** | **100.0%** |\n\n"
+            f"**Key Finding:** Scope 3 supply-chain operations account for the largest decarbonization opportunity. Transitioning long-haul freight to rail and enforcing renewable PPAs can eliminate up to 30% of this footprint."
+        )
+        citations.append({
+            "type": "PortfolioSummary",
+            "metric": f"{total_em:,.1f} tCO2e"
+        })
+        followups = [
+            "How can we reduce Scope 3 emissions?",
+            "What happens if we change transportation from road to rail?",
+            "Show the top five carbon hotspots"
+        ]
+
     # 2. Specific Supplier Explanation (e.g., S-102, S-108, S-101, or name)
     elif re.search(r"s[-_ ]?1\d{2}", q) or "flagged" in q or "why was" in q:
         match = re.search(r"s[-_ ]?(1\d{2})", q)

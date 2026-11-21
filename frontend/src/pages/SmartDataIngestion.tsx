@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   UploadCloud,
   FileSpreadsheet,
@@ -9,9 +9,12 @@ import {
   Sparkles,
   Layers,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  Search,
+  Table as TableIcon
 } from 'lucide-react';
 import { api } from '../services/api';
+import { StatusBadge } from '../components/StatusBadge';
 
 export const SmartDataIngestion: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -20,6 +23,24 @@ export const SmartDataIngestion: React.FC = () => {
   const [seeding, setSeeding] = useState(false);
   const [seedSuccess, setSeedSuccess] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [recentRecords, setRecentRecords] = useState<any[]>([]);
+  const [loadingRecords, setLoadingRecords] = useState(false);
+
+  useEffect(() => {
+    loadRecentRecords();
+  }, []);
+
+  const loadRecentRecords = async () => {
+    try {
+      setLoadingRecords(true);
+      const data = await api.getIngestedRecords(10);
+      setRecentRecords(data);
+    } catch (err) {
+      console.error('Failed to load recent records', err);
+    } finally {
+      setLoadingRecords(false);
+    }
+  };
 
   const expectedFields = [
     { field: 'Supplier ID', type: 'String (Code)', required: true },
@@ -58,6 +79,7 @@ export const SmartDataIngestion: React.FC = () => {
       setUploading(true);
       const res = await api.uploadDataset(file);
       setUploadResult(res);
+      await loadRecentRecords();
     } catch (err: any) {
       alert(`Upload error: ${err.message}`);
     } finally {
@@ -82,6 +104,7 @@ export const SmartDataIngestion: React.FC = () => {
         ],
         columns_mapped: ['Supplier ID', 'Production Volume', 'Electricity', 'Fuel', 'Distance', 'Mode']
       });
+      await loadRecentRecords();
       setTimeout(() => setSeedSuccess(false), 3000);
     } catch (err) {
       alert('Error seeding demo data');
@@ -257,6 +280,81 @@ export const SmartDataIngestion: React.FC = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Ingested Operational Records Preview Table */}
+      <div className="p-5 rounded-2xl bg-charcoal-850/80 border border-charcoal-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <TableIcon className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-sm font-semibold text-white">Ingested Operational Telemetry Preview</h2>
+            <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-900">
+              Live Verified Data
+            </span>
+          </div>
+          <span className="text-xs text-charcoal-400">
+            Showing latest {recentRecords.length} records processed through GHG calculation engine
+          </span>
+        </div>
+
+        {loadingRecords ? (
+          <div className="p-8 text-center text-xs text-charcoal-400">Loading ingested telemetry...</div>
+        ) : recentRecords.length === 0 ? (
+          <div className="p-8 text-center bg-charcoal-900 rounded-xl border border-charcoal-800 text-charcoal-400 text-xs">
+            No records in database. Click "Load Demo Dataset" above or upload a CSV file.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead>
+                <tr className="border-b border-charcoal-800 text-charcoal-400 uppercase text-[10px] tracking-wider font-semibold">
+                  <th className="py-2.5 px-3">Supplier ID</th>
+                  <th className="py-2.5 px-3">Company Name</th>
+                  <th className="py-2.5 px-3">Scale</th>
+                  <th className="py-2.5 px-3">Industry</th>
+                  <th className="py-2.5 px-3 text-right">Volume</th>
+                  <th className="py-2.5 px-3 text-right">Electricity</th>
+                  <th className="py-2.5 px-3 text-right">Fuel</th>
+                  <th className="py-2.5 px-3">Freight Mode</th>
+                  <th className="py-2.5 px-3 text-right">Calculated tCO2e</th>
+                  <th className="py-2.5 px-3 text-center">Quality Score</th>
+                  <th className="py-2.5 px-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-charcoal-800/60 font-sans">
+                {recentRecords.map((r) => (
+                  <tr key={r.id} className="hover:bg-charcoal-800/40 transition-colors">
+                    <td className="py-2.5 px-3 font-mono font-medium text-emerald-400">{r.supplier_code}</td>
+                    <td className="py-2.5 px-3 font-medium text-white">{r.name}</td>
+                    <td className="py-2.5 px-3"><StatusBadge type="size" value={r.size} /></td>
+                    <td className="py-2.5 px-3 text-charcoal-300">{r.industry}</td>
+                    <td className="py-2.5 px-3 text-right font-mono text-charcoal-200">{Number(r.production_volume).toLocaleString()}</td>
+                    <td className="py-2.5 px-3 text-right font-mono text-charcoal-300">{Number(r.electricity).toLocaleString()} kWh</td>
+                    <td className="py-2.5 px-3 text-right font-mono text-charcoal-300">{Number(r.fuel).toLocaleString()} L</td>
+                    <td className="py-2.5 px-3 font-mono text-charcoal-300">{r.mode} ({r.distance} km)</td>
+                    <td className="py-2.5 px-3 text-right font-mono font-bold text-white">
+                      {Number(r.calculated_tco2e).toFixed(1)} t
+                    </td>
+                    <td className="py-2.5 px-3 text-center font-mono">
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                        r.quality_score >= 90
+                          ? 'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                          : r.quality_score >= 70
+                          ? 'bg-amber-950 text-amber-400 border border-amber-800'
+                          : 'bg-rose-950 text-rose-400 border border-rose-800'
+                      }`}>
+                        {r.quality_score}%
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-right">
+                      <StatusBadge type="status" value={r.status || 'Verified'} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

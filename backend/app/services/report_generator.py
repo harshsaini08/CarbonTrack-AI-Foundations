@@ -319,12 +319,12 @@ def generate_supplier_audit_pdf(db: Session, supplier_id: int) -> bytes:
     if fa:
         fair_info = [
             [Paragraph("<b>Metric</b>", body_style), Paragraph("<b>Value</b>", body_style)],
-            ["Absolute Ranking", f"#{fa.absolute_rank}"],
-            ["Normalized Ranking", f"#{fa.normalized_rank}"],
-            ["Ranking Shift", f"{fa.rank_delta:+d} positions"],
-            ["Supplier Fairness Score", f"{fa.supplier_fairness_score:.1f} / 100"],
-            ["Peer Group Mean Intensity", f"{fa.peer_group_mean_intensity:.4f} tCO2e/unit"],
-            ["Equity Finding", fa.explanation or "Consistent performance with industry peers."]
+            [Paragraph("<b>Absolute Ranking</b>", body_style), Paragraph(f"#{fa.absolute_rank}", body_style)],
+            [Paragraph("<b>Normalized Ranking</b>", body_style), Paragraph(f"#{fa.normalized_rank}", body_style)],
+            [Paragraph("<b>Ranking Shift</b>", body_style), Paragraph(f"{fa.rank_delta:+d} positions", body_style)],
+            [Paragraph("<b>Supplier Fairness Score</b>", body_style), Paragraph(f"{fa.supplier_fairness_score:.1f} / 100", body_style)],
+            [Paragraph("<b>Peer Group Mean Intensity</b>", body_style), Paragraph(f"{fa.peer_group_mean_intensity:.4f} tCO2e/unit", body_style)],
+            [Paragraph("<b>Equity Finding</b>", body_style), Paragraph(fa.explanation or "Consistent performance with industry peers.", body_style)]
         ]
         t_fair = Table(fair_info, colWidths=[180, 340])
         t_fair.setStyle(TableStyle([

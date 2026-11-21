@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, BarChart, Bar, Legend
+  PieChart, Pie, Cell, BarChart, Bar, ScatterChart, Scatter, ZAxis
 } from 'recharts';
 import { KPICard } from '../components/KPICard';
 import { StatusBadge } from '../components/StatusBadge';
@@ -348,7 +348,76 @@ export const ExecutiveCommandCenter: React.FC = () => {
         </div>
       </div>
 
-      {/* Row 4: Top 10 Contributors Table */}
+      {/* Row 4: Emission Intensity vs Production Volume Scatter Visualizer */}
+      <div className="p-5 rounded-2xl bg-charcoal-850/70 border border-charcoal-800 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <TrendingDown className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-sm font-semibold text-white">Emission Intensity vs. Production Volume (Scale Equity Benchmark)</h2>
+          </div>
+          <div className="flex items-center gap-3 text-xs">
+            <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span><span className="text-charcoal-400">Small Tier</span></div>
+            <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-purple-500"></span><span className="text-charcoal-400">Medium Tier</span></div>
+            <div className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span className="text-charcoal-400">Large Tier</span></div>
+          </div>
+        </div>
+
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <ScatterChart margin={{ top: 10, right: 20, left: 0, bottom: 10 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+              <XAxis
+                type="number"
+                dataKey="production_volume"
+                name="Production Volume"
+                stroke="#6b7280"
+                fontSize={11}
+                tickFormatter={(val) => `${(val / 1000).toFixed(0)}k u`}
+              />
+              <YAxis
+                type="number"
+                dataKey="emission_intensity"
+                name="Emission Intensity"
+                stroke="#6b7280"
+                fontSize={11}
+                tickFormatter={(val) => val.toFixed(4)}
+              />
+              <ZAxis type="number" dataKey="total_emissions" range={[60, 320]} name="Gross Footprint" />
+              <Tooltip
+                content={({ active, payload }) => {
+                  if (active && payload && payload.length) {
+                    const data = payload[0].payload;
+                    return (
+                      <div className="p-3 bg-charcoal-900 border border-charcoal-700 rounded-xl shadow-xl text-xs space-y-1 font-mono">
+                        <div className="text-white font-bold">{data.supplier_code} - {data.supplier_name}</div>
+                        <div className="text-charcoal-400">Tier: <span className="text-emerald-400">{data.size}</span> ({data.industry})</div>
+                        <div className="text-charcoal-300">Volume: <span className="text-white font-bold">{data.production_volume.toLocaleString()} units</span></div>
+                        <div className="text-charcoal-300">Intensity: <span className="text-emerald-400 font-bold">{data.emission_intensity.toFixed(5)} t/u</span></div>
+                        <div className="text-charcoal-300">Gross: <span className="text-white font-bold">{data.total_emissions.toLocaleString()} tCO2e</span></div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
+              <Scatter name="Suppliers" data={metrics?.intensity_distribution || []}>
+                {metrics?.intensity_distribution.map((entry, index) => {
+                  let fillColor = '#3b82f6';
+                  if (entry.size === 'Medium') fillColor = '#a855f7';
+                  if (entry.size === 'Large') fillColor = '#10b981';
+                  return <Cell key={`cell-${index}`} fill={fillColor} />;
+                })}
+              </Scatter>
+            </ScatterChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="text-[11px] text-charcoal-400 flex items-center justify-between pt-1 border-t border-charcoal-800">
+          <span>Bubble size reflects gross carbon footprint (tCO2e).</span>
+          <span className="font-mono text-emerald-400">Target zone: High volume + low unit intensity</span>
+        </div>
+      </div>
+
+      {/* Row 5: Top 10 Contributors Table */}
       <div className="p-5 rounded-2xl bg-charcoal-850/70 border border-charcoal-800 space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

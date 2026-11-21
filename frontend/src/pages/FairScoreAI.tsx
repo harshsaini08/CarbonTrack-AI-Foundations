@@ -209,8 +209,8 @@ export const FairScoreAI: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-charcoal-800/60 font-sans">
               {assessments.map((fa) => {
-                const isImproved = fa.rank_delta < 0; // In ranking, smaller number is better (#5 is better than #25)
-                const isWorse = fa.rank_delta > 0;
+                const isImproved = fa.rank_delta > 0; // Positive delta = gained positions (e.g. #22 to #3 is +19)
+                const isWorse = fa.rank_delta < 0;    // Negative delta = dropped positions
                 const shiftAbs = Math.abs(fa.rank_delta);
 
                 return (

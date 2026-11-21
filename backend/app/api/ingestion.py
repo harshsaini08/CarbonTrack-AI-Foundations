@@ -86,7 +86,10 @@ async def upload_dataset(
     
     try:
         if filename.endswith(".csv"):
-            df = pd.read_csv(io.BytesIO(contents))
+            try:
+                df = pd.read_csv(io.BytesIO(contents), encoding="utf-8-sig")
+            except Exception:
+                df = pd.read_csv(io.BytesIO(contents), encoding="latin-1")
         elif filename.endswith((".xls", ".xlsx")):
             df = pd.read_excel(io.BytesIO(contents))
         else:
@@ -241,6 +244,27 @@ async def upload_dataset(
     run_carbon_audit(db, audit.id)
     run_fairness_assessment(db, audit.id)
 
+    # Fetch top 10 preview records
+    preview_query = db.query(OperationalRecord).join(Supplier).order_by(OperationalRecord.id.desc()).limit(10).all()
+    preview_rows = [
+        {
+            "id": r.id,
+            "supplier_code": r.supplier.supplier_code,
+            "name": r.supplier.name,
+            "size": r.supplier.size,
+            "industry": r.supplier.industry,
+            "production_volume": r.production_volume,
+            "electricity": r.electricity_consumption,
+            "fuel": r.fuel_consumption,
+            "distance": r.transportation_distance,
+            "mode": r.transportation_mode,
+            "calculated_tco2e": r.calculated_total_emissions,
+            "quality_score": r.data_quality_score,
+            "status": r.status
+        }
+        for r in preview_query
+    ]
+
     return {
         "status": "success",
         "filename": file.filename,
@@ -248,5 +272,29 @@ async def upload_dataset(
         "existing_suppliers_updated": duplicate_count,
         "warnings": validation_warnings[:10],
         "columns_mapped": list(col_map.keys()),
-        "data_quality_preview": "Verified and audited"
+        "data_quality_preview": "Verified and audited",
+        "preview_rows": preview_rows
     }
+
+@router.get("/records")
+def get_recent_ingested_records(limit: int = 15, db: Session = Depends(get_db)):
+    """Retrieves recently ingested operational records for the data preview table."""
+    records = db.query(OperationalRecord).join(Supplier).order_by(OperationalRecord.id.desc()).limit(limit).all()
+    return [
+        {
+            "id": r.id,
+            "supplier_code": r.supplier.supplier_code,
+            "name": r.supplier.name,
+            "size": r.supplier.size,
+            "industry": r.supplier.industry,
+            "production_volume": r.production_volume,
+            "electricity": r.electricity_consumption,
+            "fuel": r.fuel_consumption,
+            "distance": r.transportation_distance,
+            "mode": r.transportation_mode,
+            "calculated_tco2e": r.calculated_total_emissions,
+            "quality_score": r.data_quality_score,
+            "status": r.status
+        }
+        for r in records
+    ]

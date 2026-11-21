@@ -368,11 +368,24 @@ export const CarbonTwinSimulator: React.FC = () => {
             </div>
           </div>
 
-          {/* AI Optimization Recommendations */}
+          {/* AI Optimization Recommendations & Scope Abatement */}
           <div className="p-5 rounded-2xl bg-forest-950/40 border border-emerald-900/60 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Carbon Twin Optimization Pathway</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-emerald-400 font-semibold text-xs uppercase tracking-wider">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Carbon Twin Optimization Pathway</span>
+              </div>
+              <div className="flex items-center gap-2 text-[10px] font-mono">
+                <span className="bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded border border-emerald-800">
+                  S1: -{simResult?.scope1_reduction.toLocaleString()}t
+                </span>
+                <span className="bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-800">
+                  S2: -{simResult?.scope2_reduction.toLocaleString()}t
+                </span>
+                <span className="bg-purple-950 text-purple-400 px-2 py-0.5 rounded border border-purple-800">
+                  S3: -{simResult?.scope3_reduction.toLocaleString()}t
+                </span>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -390,21 +403,26 @@ export const CarbonTwinSimulator: React.FC = () => {
       {/* Saved Scenarios List */}
       {savedScenarios.length > 0 && (
         <div className="p-5 rounded-2xl bg-charcoal-850/80 border border-charcoal-800 space-y-4">
-          <h2 className="text-sm font-semibold text-white">Saved Simulation Scenarios</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-white">Saved Decarbonization Scenarios</h2>
+            <span className="text-xs text-charcoal-400">Click "Apply to Simulator" to load parameters</span>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {savedScenarios.map((sc) => (
-              <div key={sc.id} className="p-4 rounded-xl bg-charcoal-900 border border-charcoal-800 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div>
+              <div key={sc.id} className="p-4 rounded-xl bg-charcoal-900 border border-charcoal-800 space-y-3 flex flex-col justify-between">
+                <div className="space-y-1">
+                  <div className="flex items-start justify-between">
                     <h3 className="text-xs font-bold text-white">{sc.name}</h3>
-                    <p className="text-[11px] text-charcoal-400 mt-0.5">{sc.supplier_name}</p>
+                    <button
+                      onClick={() => handleDeleteScenario(sc.id)}
+                      className="text-charcoal-500 hover:text-rose-400 p-1"
+                      title="Delete Scenario"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleDeleteScenario(sc.id)}
-                    className="text-charcoal-500 hover:text-rose-400 p-1"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  <p className="text-[11px] text-charcoal-400">{sc.supplier_name}</p>
+                  {sc.description && <p className="text-[11px] text-charcoal-300 italic">{sc.description}</p>}
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-xs font-mono">
@@ -413,10 +431,27 @@ export const CarbonTwinSimulator: React.FC = () => {
                     <span className="font-bold text-emerald-400">-{sc.percentage_reduction.toFixed(1)}%</span>
                   </div>
                   <div className="bg-charcoal-850 p-1.5 rounded">
-                    <span className="text-[10px] text-charcoal-400 block uppercase">Savings</span>
-                    <span className="font-bold text-blue-400">-${Math.abs(sc.estimated_cost_impact_usd).toLocaleString()}</span>
+                    <span className="text-[10px] text-charcoal-400 block uppercase">Financial</span>
+                    <span className="font-bold text-blue-400">
+                      {sc.estimated_cost_impact_usd < 0 ? `-$${Math.abs(sc.estimated_cost_impact_usd).toLocaleString()}` : `+$${sc.estimated_cost_impact_usd.toLocaleString()}`}
+                    </span>
                   </div>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTargetTransportMode('Rail');
+                    setRenewableEnergyRatio(50);
+                    setEnergyEfficiencyPct(20);
+                    setFuelReductionPct(25);
+                    alert(`Loaded scenario "${sc.name}" into simulator sliders.`);
+                  }}
+                  className="w-full py-1.5 rounded-lg text-xs font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-800/80 hover:bg-emerald-900/50 transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <Sparkles className="w-3 h-3 text-emerald-400" />
+                  <span>Apply to Simulator</span>
+                </button>
               </div>
             ))}
           </div>
