@@ -6,6 +6,7 @@ Includes robust local rule-based intelligence engine and optional LLM integratio
 
 from typing import Dict, Any, List
 import re
+import numpy as np
 from sqlalchemy.orm import Session
 from app.models import Supplier, OperationalRecord, AuditFinding, FairnessAssessment
 from app.services.simulator import run_what_if_simulation
@@ -65,7 +66,7 @@ def answer_copilot_query(db: Session, query: str) -> Dict[str, Any]:
 
     # 1b. Cleanest / Lowest Emission Intensity Supplier Query
     elif "cleanest" in q or ("lowest" in q and "intensity" in q) or "most efficient" in q:
-        sorted_records = sorted(records, key=lambda r: r.emission_intensity, ascending=True)
+        sorted_records = sorted(records, key=lambda r: r.emission_intensity)
         top_clean = sorted_records[0]
         sup = top_clean.supplier
         
