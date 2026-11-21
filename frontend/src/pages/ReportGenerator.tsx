@@ -75,7 +75,7 @@ export const ReportGenerator: React.FC = () => {
             </span>
           </h1>
           <p className="text-xs text-charcoal-400 mt-1">
-            Export investor-grade audit reports compliant with the GHG Protocol Corporate Standard, complete with ProofChain verification hashes.
+            Export comprehensive, audit-grade sustainability reports compliant with the GHG Protocol Corporate Standard, complete with ProofChain verification hashes.
           </p>
         </div>
       </div>

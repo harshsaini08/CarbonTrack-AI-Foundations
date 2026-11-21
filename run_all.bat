@@ -1,8 +1,8 @@
 @echo off
-title CarbonTrack - Enterprise Footprint Auditor
+title CarbonTrack - AI-Powered Carbon Footprint Intelligence System
 cd /d "%~dp0"
 echo ========================================================
-echo  Launching CarbonTrack - Full Stack Platform
+echo  Launching CarbonTrack - AI Foundations (CA) · LPU
 echo ========================================================
 echo Starting Backend API on http://127.0.0.1:8000 ...
 start "CarbonTrack Backend" cmd /k "run_backend.bat"
@@ -16,6 +16,6 @@ start "CarbonTrack Frontend" cmd /k "run_frontend.bat"
 echo.
 echo ========================================================
 echo  CarbonTrack is running!
-echo  Frontend UI: http://localhost:5173
+echo  Academic Project UI: http://localhost:5173
 echo  Backend API Docs: http://127.0.0.1:8000/docs
 echo ========================================================

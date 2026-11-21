@@ -89,6 +89,8 @@ def generate_enterprise_audit_pdf(db: Session, audit_id: int) -> bytes:
     # 1. Header Banner
     story.append(Paragraph("CarbonTrack Enterprise Footprint & Fairness Audit", title_style))
     story.append(Paragraph("AI-Powered Carbon Footprint Auditor & Supplier Fairness Intelligence", subtitle_style))
+    inst_style = ParagraphStyle('InstStyle', parent=body_style, fontSize=9, textColor=C_FOREST, alignment=1)
+    story.append(Paragraph("Lovely Professional University · Artificial Intelligence Foundations · Continuous Assessment (CA)", inst_style))
     story.append(Spacer(1, 8))
     story.append(HRFlowable(width="100%", thickness=2, color=C_EMERALD, spaceAfter=14))
 
@@ -106,8 +108,8 @@ def generate_enterprise_audit_pdf(db: Session, audit_id: int) -> bytes:
     avg_fairness = sum(fa.supplier_fairness_score for fa in assessments) / max(1, len(assessments))
 
     meta_data = [
-        [Paragraph("<b>Audit ID:</b> CT-AUDIT-2026", body_style), Paragraph(f"<b>Audit Date:</b> {now_str}", body_style)],
-        [Paragraph("<b>Reporting Period:</b> 2025-2026 Fiscal Cycle", body_style), Paragraph("<b>Standard:</b> GHG Protocol Corporate Standard", body_style)],
+        [Paragraph("<b>Academic Project:</b> CarbonTrack (LPU CA)", body_style), Paragraph(f"<b>Audit Date:</b> {now_str}", body_style)],
+        [Paragraph("<b>Subject:</b> Artificial Intelligence Foundations", body_style), Paragraph("<b>Standard:</b> GHG Protocol Corporate Standard", body_style)],
         [Paragraph(f"<b>Suppliers Audited:</b> {len(suppliers)}", body_style), Paragraph(f"<b>Total Scope 1-3 Footprint:</b> {total_emissions:,.1f} tCO2e", body_style)],
         [Paragraph(f"<b>Audit Flags Detected:</b> {len(findings)}", body_style), Paragraph(f"<b>Portfolio Fairness Index:</b> {avg_fairness:.1f} / 100", body_style)],
     ]

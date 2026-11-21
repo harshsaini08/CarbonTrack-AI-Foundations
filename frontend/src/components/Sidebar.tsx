@@ -11,7 +11,8 @@ import {
   FileSpreadsheet,
   Settings,
   Leaf,
-  Layers
+  Layers,
+  GraduationCap
 } from 'lucide-react';
 import { Role } from '../types';
 
@@ -24,6 +25,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab, activeRole }) => {
   const navItems = [
     { id: 'overview', label: 'Command Center', icon: LayoutDashboard, badge: null },
+    { id: 'ai-foundations', label: 'AI Foundations', icon: GraduationCap, badge: 'Academic' },
     { id: 'ingestion', label: 'Data Ingestion', icon: UploadCloud, badge: 'Live' },
     { id: 'auditor', label: 'Carbon Auditor', icon: ShieldAlert, badge: 'AI' },
     { id: 'suppliers', label: 'Supplier Intel', icon: Building2, badge: null },
@@ -51,9 +53,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, setCurrentTab, act
         <div>
           <div className="flex items-center gap-1.5">
             <span className="font-bold text-lg tracking-tight text-white font-sans">CarbonTrack</span>
-            <span className="text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">v2.4</span>
+            <span className="text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded border border-emerald-500/20">Academic</span>
           </div>
-          <p className="text-[11px] text-charcoal-400 font-medium">Enterprise Footprint Auditor</p>
+          <p className="text-[11px] text-charcoal-400 font-medium">LPU · AI Foundations (CA)</p>
         </div>
       </div>
 

@@ -1,298 +1,264 @@
 # CarbonTrack
-### AI-Powered Enterprise Carbon Footprint Auditor with Supplier Fairness Intelligence
+### AI-Powered Carbon Footprint Intelligence and Supplier Sustainability Analysis System
 
-> **Tagline:** *"Measure Carbon. Detect Bias. Build a Fairer Supply Chain."*
-
-CarbonTrack is a fully functional, enterprise-grade sustainability auditing platform that analyzes enterprise supply-chain operational telemetry to identify carbon emission hotspots, detect suspicious reporting disclosures, and ensure small-scale suppliers are not unfairly penalized by traditional carbon evaluation systems.
+> **Official Purpose:** *"CarbonTrack is an intelligent carbon footprint analysis system that uses AI-assisted analysis, statistical techniques, data-driven insights, and simulation to help organizations monitor carbon emissions, evaluate supplier sustainability, identify potential fairness issues, and explore emission reduction strategies."*
 
 ---
 
-## 🌟 The Core Problem CarbonTrack Solves
+## 1. Project Overview
 
-Traditional enterprise carbon evaluation systems assess suppliers using **absolute gross emissions ($tCO_2e$)**.
-This creates two severe structural failures:
+**CarbonTrack** is an academic software prototype developed to demonstrate the practical application of Artificial Intelligence Foundations, statistical inference, rule-based expert systems, and decision-support modeling to corporate environmental sustainability.
 
-1. **Systemic Scale Bias:** Small-scale suppliers (Tier 2 & 3) often produce low absolute carbon solely because of lower production capacity, but are penalized by procurement algorithms for lack of reporting maturity or lower absolute volumes. Conversely, efficient small suppliers who produce with world-class clean unit intensity are ranked below large, dirty suppliers.
-2. **Masked Volume Inefficiencies:** Giant suppliers frequently produce massive volumes with high unit inefficiency, yet evade scrutiny because their absolute reporting meets broad corporate thresholds.
-
-### CarbonTrack solves this through Dual Intelligence:
-
-1. **Carbon Intelligence:** Transparent, mathematical GHG Protocol Corporate Standard calculations across **Scope 1** (direct fuel combustion), **Scope 2** (purchased grid electricity), and **Scope 3** (freight logistics modal shift, materials, and industrial waste).
-2. **FAIRScore AI (Supplier Fairness Intelligence):** Normalizes emissions by production volume ($\text{Intensity} = \frac{\text{Total Emissions}}{\text{Production Volume}}$), benchmarks within industry peer groups, detects statistical disparities in audit flag rates across enterprise scale tiers (Small, Medium, Large), and generates explainable equity adjustments.
+The system ingests supplier operational activity (fuel consumption, grid electricity draw, logistics freight modes, and production volume), calculates Scopes 1, 2, and 3 emissions under the **GHG Protocol Corporate Standard**, runs heuristic anomaly auditing, evaluates supplier equity through the **FAIRScore AI** engine, projects net-zero pathways via a **Carbon Twin Simulator**, and verifies audit non-repudiation using a **ProofChain SHA-256 cryptographic trail**.
 
 ---
 
-## 🛠️ Technology Stack
+## 2. Academic Context
 
-- **Frontend:**
-  - React.js (TypeScript) + Vite
-  - Tailwind CSS with custom Sustainability-Tech palette (`forest`, `emerald`, `charcoal`)
-  - Recharts for responsive analytics, area trends, donut breakdowns, and horizontal bar charts
-  - Lucide React for consistent iconography
-  - Glassmorphic panels with custom scrollbars and dark-mode styling
-- **Backend:**
-  - Python 3.14 / 3.12 + FastAPI
-  - SQLAlchemy ORM with SQLite database (structured for PostgreSQL migration)
-  - Pydantic v2 schemas for strict input validation
-  - ReportLab for downloadable investor-grade PDF audit reports
-  - NumPy & Pandas for peer-group statistical normalization and IQR anomaly bounds
-  - SHA-256 recursive cryptographic hashing for the **ProofChain** tamper-evident ledger
-- **AI & Analytics:**
-  - Rule-based, mathematical explainable auditing engine
-  - Statistical disparity checks (group-wise flag rates, sample-size-aware warnings)
-  - Conversational **CarbonTrack Intelligence Copilot** with live telemetry grounding and evidence citations
+- **University:** Lovely Professional University (LPU)
+- **Subject:** Artificial Intelligence Foundations
+- **Assessment:** Continuous Assessment (CA)
+- **Project Domain:** Artificial Intelligence, Environmental Sustainability, Carbon Analytics, and Intelligent Decision Support
+- **Evaluation Guide:** 11-Step Guided Project Demonstration built directly into the UI for faculty review
 
 ---
 
-## 📂 Project Architecture
+## 3. Problem Statement
+
+Corporate supply-chain emissions (**Scope 3**) typically constitute over **70% to 90%** of an enterprise’s greenhouse gas footprint. However, current sustainability accounting approaches suffer from three critical deficiencies:
+
+1. **Systemic Scale Bias in Supplier Evaluation:** Traditional carbon ranking algorithms evaluate suppliers strictly by **gross absolute emissions ($tCO_2e$)**. Consequently, large suppliers are automatically classified as high-risk simply due to their massive production capacity, while small, carbon-inefficient suppliers appear "sustainable" merely because their low output yields a modest absolute carbon footprint.
+2. **Opacity and Greenwashing:** Supplier ESG questionnaires and self-reported emissions frequently contain mathematical discrepancies, outdated grid emission factors, or unsubstantiated claims that human auditing teams cannot easily verify across thousands of Tier-1 and Tier-2 vendors.
+3. **Lack of Actionable Decarbonization Modeling:** Existing ESG dashboards act as static historical ledgers rather than active decision-support systems, failing to provide predictive "What-If" simulations that quantify the carbon and financial impact of logistical modal shifts or renewable energy transitions.
+
+---
+
+## 4. Project Objectives
+
+1. **Codify Domain Knowledge:** Implement an automated, deterministic expert rule engine for Scope 1, Scope 2, and Scope 3 greenhouse gas calculations conforming to EPA and DEFRA standards.
+2. **Mitigate Scale Bias:** Implement **FAIRScore AI**, a production-normalized intensity ranking system ($\\text{Intensity} = \\frac{\\text{Gross Emissions}}{\\text{Production Volume}}$) that evaluates suppliers within industry peer groups ($Z$-score statistical dispersion).
+3. **Automate Anomaly Detection:** Formulate rule-based heuristics to detect fuel consumption abnormalities, excessive air-freight logistics, and discrepancies between reported and calculated carbon metrics.
+4. **Provide Interactive Decision Support:** Build a **Carbon Twin What-If Simulator** enabling procurement managers to evaluate modal shifts (Road to Rail) and renewable electricity adoption in terms of both emissions avoidance ($tCO_2e$) and financial delta (USD).
+5. **Ensure Audit Non-Repudiation:** Construct a sequential SHA-256 cryptographic ledger (**ProofChain**) guaranteeing that audit evidence and verification events cannot be tampered with.
+6. **Democratize Interrogation:** Implement a database-grounded conversational agent (**Sustainability Copilot**) enabling natural language queries with evidence citations.
+
+---
+
+## 5. Existing System
+
+Traditional corporate carbon management relies primarily on:
+- Manual spreadsheet data collection (Excel) transmitted through annual email surveys.
+- High-level enterprise calculators that multiply supplier spend (spend-based accounting) by average industry factors rather than tracking physical activity data.
+- Absolute gross emission sorting without normalizing for production units or supplier scale.
+- Third-party manual consulting audits that are slow, expensive, and conducted only annually.
+
+**Shortcomings of Existing Systems:**
+- High error rates and duplicate entries.
+- Unfair disqualification of small, highly efficient suppliers.
+- Zero cryptographic audit trails.
+- No interactive simulation capabilities.
+
+---
+
+## 6. Proposed System (CarbonTrack)
+
+CarbonTrack replaces static spreadsheets with an end-to-end intelligent auditing architecture:
+- **Smart Data Ingestion:** Automated multi-encoding parser supporting CSV and Excel files, dynamic column schema mapping, and automated data quality scoring.
+- **AI Carbon Auditor:** Real-time rule-based engine categorizing anomalies into 4 severity tiers with quantified carbon impacts and corrective guidance.
+- **FAIRScore AI:** Dual-ranking engine displaying both Absolute Rank and Normalized Rank, highlighting rank shift deltas (e.g., $+20$ for efficient large suppliers, $-25$ for inefficient small suppliers).
+- **Carbon Twin Simulator:** Real-time what-if scenario calculator projecting carbon and cost impacts.
+- **ProofChain Ledger:** Cryptographic SHA-256 block-linked audit records.
+- **AI Sustainability Copilot:** Semantic natural language parser with live SQL database retrieval.
+- **PDF Report Generator:** Exportable GHG-compliant audit reports with complete mathematical disclosure.
+
+---
+
+## 7. Artificial Intelligence Concepts Used
+
+CarbonTrack strictly adheres to **academic honesty**, distinguishing between deterministic rules, statistical algorithms, and decision-support systems:
+
+| Technique / Paradigm | Curricular AI Concept | Implementation in CarbonTrack | Concrete Live Example |
+|---|---|---|---|
+| **Rule-Based Expert System** | Knowledge Representation & Automated Deduction | Codified GHG Protocol calculation rules, activity-to-emission multipliers, and severity classifiers | $Scope_1 = \text{Diesel (L)} \times 2.68$, $Scope_2 = \text{Electricity (kWh)} \times 0.42$ |
+| **Statistical Analysis** | Central Tendency & Dispersion Metrics | Peer-group normalization, industry standard deviation, and Z-score outlier boundaries | Supplier S-101 fuel consumption exceeds industry mean by $2.3\sigma$, triggering a Critical finding |
+| **Algorithmic Fairness** | Demographic Parity & Scale Normalization | FAIRScore dual-ranking engine decoupling volume scale from carbon efficiency | Small vendor MicroMelt demoted 25 positions due to high unit intensity ($0.0366\ tCO_2e/\text{unit}$) |
+| **Decision Support Systems** | Multi-Criteria Decision Analysis (MCDA) | Executive Command Center & interactive multi-tier filtering | Real-time portfolio analysis across 32 suppliers, 5 sectors, and 3 Scope tiers |
+| **Counterfactual Simulation** | Predictive Modeling & Sensitivity Analysis | Carbon Twin Simulator applying parameterized operational shifts | Road-to-Rail modal shift + 60% Solar yields $-30.6\%$ emissions reduction ($-5,134.9\ tCO_2e$) |
+| **Natural Language Processing** | Semantic Parsing & Grounded Information Retrieval | Sustainability Copilot mapping queries to live database tuples | Query: *"Who are the top 5 emitters?"* returns structured table citing Vulcan, GreenCircuit, Pinnacle |
+| **Explainable AI (XAI)** | Algorithmic Transparency & Model Auditability | Step-by-step mathematical disclosure for all audit findings and ranking changes | Every audit finding includes detected issue, formula, impact in tCO2e, severity, and action |
+
+---
+
+## 8. System Architecture
 
 ```
-Ai Project/
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth.py          # Authentication, user directory, persona switching
-│   │   │   ├── dashboard.py     # Executive Command Center KPI aggregations
-│   │   │   ├── ingestion.py     # CSV/Excel parsing, auto-mapping, validation, demo seeder
-│   │   │   ├── auditor.py       # AI Carbon Auditor execution and finding review
-│   │   │   ├── suppliers.py     # Supplier directory, profiles, operational records
-│   │   │   ├── fairness.py      # FAIRScore AI rankings, peer benchmarks, disparity stats
-│   │   │   ├── simulator.py     # Carbon Twin What-If simulation engine & scenarios
-│   │   │   ├── proofchain.py    # Tamper-evident SHA-256 chain and integrity verifier
-│   │   │   ├── copilot.py       # CarbonTrack Intelligence conversational Q&A
-│   │   │   ├── reports.py       # Enterprise & Supplier PDF generators
-│   │   │   └── settings.py      # Configurable GHG emission factors & system metadata
-│   │   ├── services/
-│   │   │   ├── carbon_calculator.py  # GHG Protocol Scope 1, 2, 3 calculations
-│   │   │   ├── auditor.py            # Outlier detection, discrepancy flags, fuel/freight checks
-│   │   │   ├── fairness_engine.py    # FAIRScore normalization and disparity engine
-│   │   │   ├── simulator.py          # Decarbonization what-if scenario calculator
-│   │   │   ├── proofchain.py         # SHA-256 hash-linking and verification logic
-│   │   │   ├── copilot.py            # Local semantic query router with evidence citations
-│   │   │   └── report_generator.py   # ReportLab PDF builder (tables, seals, summaries)
-│   │   ├── config.py            # Application paths and settings
-│   │   ├── database.py          # SQLite engine and session factory
-│   │   ├── models.py            # SQLAlchemy database tables
-│   │   ├── schemas.py           # Pydantic request/response models
-│   │   ├── seed_data.py         # 32+ realistic suppliers and pre-configured edge cases
-│   │   └── main.py              # FastAPI application entrypoint with auto-seeding
-│   └── tests/
-│       └── test_core.py         # Automated pytest suite for calculations and ProofChain
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Sidebar.tsx          # 10-item professional navigation with role badge
-│   │   │   ├── Header.tsx           # Org header, 1-click Demo seeder, role switcher
-│   │   │   ├── KPICard.tsx          # Polished KPI metric card with trends
-│   │   │   ├── StatusBadge.tsx      # Severity, status, tier, and bias badges
-│   │   │   └── DemoTourModal.tsx    # 8-step hackathon demonstration guide dialog
-│   │   ├── pages/
-│   │   │   ├── ExecutiveCommandCenter.tsx # Dashboard: KPIs, Scope 1-3 charts, filters
-│   │   │   ├── SmartDataIngestion.tsx  # Upload CSV/Excel, column mapping, validation
-│   │   │   ├── CarbonAuditor.tsx       # Live audit runner, findings table, reviewer sign-off
-│   │   │   ├── SupplierIntelligence.tsx # Supplier directory, profile drawer, history
-│   │   │   ├── FairScoreAI.tsx         # Absolute vs. Normalized ranking, disparity checks
-│   │   │   ├── CarbonTwinSimulator.tsx # What-if sliders, comparison graphs, ROI savings
-│   │   │   ├── ProofChainAuditTrail.tsx # Cryptographically hash-linked audit ledger
-│   │   │   ├── SustainabilityCopilot.tsx # Conversational AI with data-grounded citations
-│   │   │   ├── ReportGenerator.tsx     # Download Enterprise and Supplier PDF reports
-│   │   │   └── SettingsPage.tsx        # Emission factor governance & system info
-│   │   ├── services/
-│   │   │   └── api.ts                  # Typed API client connecting to backend
-│   │   ├── types/
-│   │   │   └── index.ts                # TypeScript interfaces
-│   │   ├── App.tsx                     # Main layout & router
-│   │   └── index.css                   # Custom styles, scrollbar, glassmorphism
-├── run_backend.bat              # One-click backend startup script
-├── run_frontend.bat             # One-click frontend startup script
-├── run_all.bat                  # One-click launcher for both servers
-└── start_app.py                 # Python launcher that starts both servers and opens browser
+                                  [ User Interface (Vite + React + TS) ]
+                                                     │
+                             ┌───────────────────────┴───────────────────────┐
+                             ▼                                               ▼
+             [ Executive Command Center / UI ]             [ AI Sustainability Copilot ]
+                             │                                               │
+                             └───────────────────────┬───────────────────────┘
+                                                     ▼ REST APIs (JSON)
+                                 [ FastAPI Backend Application (Python) ]
+                                                     │
+         ┌───────────────────┬───────────────────────┼───────────────────────┬───────────────────┐
+         ▼                   ▼                       ▼                       ▼                   ▼
+  [ Carbon Engine ]   [ FAIRScore AI ]       [ Auditor Engine ]      [ Carbon Twin ]     [ ProofChain ]
+   Scope 1-3 Math      Peer Z-Scores           Expert Rules            What-If Sim         SHA-256 Seal
+         │                   │                       │                       │                   │
+         └───────────────────┴───────────────────────┼───────────────────────┴───────────────────┘
+                                                     ▼
+                                      [ SQLite Database Layer ]
+                               (Suppliers, Records, Findings, Blocks)
 ```
 
 ---
 
-## 🧭 The 10 Core Application Modules
+## 9. Module Descriptions
 
-### 1. Executive Command Center (Overview)
-- **8 Dynamic KPI Cards:** Total Gross Footprint ($tCO_2e$), Scope 1 (Direct Fuel), Scope 2 (Grid Electricity), Scope 3 (Supply Chain & Logistics), Audited Suppliers, High-Risk Suppliers, Portfolio Fairness Index, and Abatement Opportunity.
-- **Interactive Multi-Scope Filters:** Real-time filtering by Industry Sector and Supplier Scale Tier.
-- **Charts:**
-  - 12-Month Carbon Emission Trends by Scope (Area chart).
-  - Scope 1, 2, and 3 Distribution (Donut chart).
-  - Emissions by Industry / Category (Horizontal Bar chart).
-  - FAIRScore distribution across Small, Medium, and Large suppliers.
-  - Top 10 Gross Carbon Contributors ranking table.
+### Module A: Executive Command Center
+Consolidates the global sustainability posture of 32 suppliers ($16,776.04\ tCO_2e$). Displays 6 interactive charts including Monthly Trends, Scope 1-3 Proportions, Sector Contributions, Top 10 Hotspots, Fairness Distributions, and an Emission Intensity vs Volume Scatter plot.
 
-### 2. Smart Data Ingestion
-- Upload `.csv`, `.xls`, and `.xlsx` supply chain files.
-- Semantic header recognition and column mapping.
-- Data validation: identifies zero/negative production volumes, missing operational fields, and discrepancy percentages.
-- **Transparent Reconstruction:** Missing carbon disclosures are automatically computed from physical activity telemetry (fuel, electricity, freight ton-km).
-- Downloadable sample CSV template and one-click demo dataset loader.
+### Module B: Smart Data Ingestion
+Ingests `.csv` (UTF-8, Latin-1) and `.xlsx` files. Validates 14 operational fields, recalculates omitted Scope values from primary telemetry, generates data quality scores (0–100), and provides an interactive pre-commit data preview.
 
-### 3. AI Carbon Auditor
-- Rule-based, explainable anomaly detection based on GHG Protocol standards:
-  - **Inconsistent Disclosures:** Flags suppliers whose reported emissions deviate $>40\%$ from calculated activity data.
-  - **Carbon Intensity Outliers:** Flags suppliers with Z-scores $>1.95\sigma$ within their industry peer group.
-  - **Excessive Fuel Combustion:** Scope 1 hotspots with abnormally high liters-per-unit.
-  - **High Freight Emissions:** Flags long-distance freight routed via air cargo ($0.602\ kgCO_2e/\text{ton-km}$) instead of rail or sea.
-  - **Missing Activity Data:** Detects missing meter telemetry.
-- **Auditor Verification Workflow:** Auditors can **Approve**, **Reject**, or **Flag** findings with custom notes. Every decision is cryptographically sealed to ProofChain.
+### Module C: AI Carbon Auditor
+Executes deterministic rule sets to identify operational anomalies: abnormal fuel draw, excessive logistics emissions, and reporting discrepancies. Tracks review status (`OPEN` $\rightarrow$ `REVIEWED`) with timestamps and user attribution.
 
-### 4. Supplier Intelligence
-- 360° supplier directory searchable by code, company name, industry, and scale tier.
-- Interactive **Supplier Profile Drawer** displaying:
-  - Historical operational disclosures.
-  - Scope 1, 2, and 3 breakdown.
-  - FAIRScore equity position and rank shifts.
-  - Active audit findings.
-  - One-click verified Supplier Audit Certificate download (PDF).
+### Module D: Supplier Intelligence
+Provides detailed micro-profiles for all 32 vendors. Analyzes individual Scope distributions, historical operational records, and relative positioning within industry peer groups.
 
-### 5. FAIRScore AI – Supplier Fairness Engine
-- **Dual Scoring Architecture:**
-  - **Carbon Performance Score ($0\text{--}100$):** Production cleanliness relative to industry bounds.
-  - **Supplier Fairness Score ($0\text{--}100$):** Equity-adjusted score mitigating scale bias.
-- **Absolute vs. Normalized Ranking Comparison:** Shows side-by-side rankings with green ($+\Delta$) and red ($-\Delta$) rank shift indicators.
-- **Statistical Disparity & Bias Audit:** Compares audit flag rates and false positive rates between Small, Medium, and Large enterprises. Flags statistical anomalies when disparity exceeds $25\%$.
-- Explains the exact mathematical rationale for every rank shift in plain language.
+### Module E: FAIRScore AI (Supplier Fairness Engine)
+Computes dual scores: Carbon Performance Score and Supplier Fairness Score. Discloses rank shift deltas (e.g., $+20$ for Oceanic Bulk Marine, $-25$ for MicroMelt Precision Stampings) to eliminate scale bias.
 
-### 6. Carbon Twin – What-If Simulator
-- Interactive supply-chain simulation sliders:
-  - **Logistics Modal Shift:** Switch freight between Road, Rail, Sea, and Air.
-  - **Clean Energy Transition:** Adjust on-site solar / renewable PPA ratio ($0\%\text{--}100\%$).
-  - **Energy Efficiency:** Model process electricity savings ($0\%\text{--}50\%$).
-  - **Thermal Optimization:** Model fuel reduction ($0\%\text{--}50\%$).
-  - **Route Optimization:** Distance adjustments ($-50\%\text{ to }+50\%$).
-- Calculates absolute carbon reduction ($tCO_2e$), percentage reduction ($\%$) and net financial impact ($\$ \text{USD}$ savings or investment).
-- Compares baseline vs. simulated emissions by Scope on a synchronized bar chart.
-- Save, retrieve, and delete customized simulation scenarios.
+### Module F: Carbon Twin Simulator
+What-if decarbonization simulation. Users adjust transport modes, fuel efficiency, and renewable grid shares, observing real-time footprint deltas and economic savings.
 
-### 7. ProofChain – Explainable Audit Trail
-- Cryptographically hash-linked ledger implementing **SHA-256 recursive digest continuity**:
-  $$\text{Block Hash} = \text{SHA-256}(\text{Index} \parallel \text{Previous Hash} \parallel \text{Timestamp} \parallel \text{Payload})$$
-- Live **Ledger Integrity Verifier** that recursively checks all blocks from the genesis block to verify tamper-evident continuity.
-- Inspect raw JSON telemetry payloads for any block.
-- Export verifiable audit evidence bundle as structured JSON.
+### Module G: ProofChain Audit Trail
+Maintains an immutable sequence of 21 SHA-256 blocks chained from genesis (`0000...0000`). Features automated mathematical verification to detect ledger tampering.
 
-### 8. AI Sustainability Copilot ("CarbonTrack Intelligence")
-- Natural language chat grounded exclusively in uploaded dataset telemetry and audit findings.
-- Pre-configured prompt chips:
-  - *"Which supplier has the highest emission intensity?"*
-  - *"Why was Supplier S-102 flagged?"*
-  - *"Which small suppliers may be unfairly evaluated?"*
-  - *"What happens if we change transportation from road to rail?"*
-  - *"Show the top five carbon hotspots."*
-  - *"Explain the fairness score methodology."*
-- Generates responses with **Evidence Citations** and suggested follow-up questions.
-- Built-in local intelligence engine ensures zero paid API dependencies.
+### Module H: AI Sustainability Copilot
+Domain-specific conversational assistant. Resolves natural language inquiries with evidence citations directly referencing underlying database records.
 
-### 9. Report Generator
-- Download **Comprehensive Enterprise Audit Report (PDF)**:
-  - Executive summary and metadata.
-  - Scope 1, Scope 2, and Scope 3 tables.
-  - Top carbon emission contributors.
-  - FAIRScore supplier equity analysis.
-  - Prioritized audit findings with corrective action recommendations.
-  - ProofChain SHA-256 ledger seal.
-- Download **Single-Supplier Audit Certificate (PDF)** with a single click.
-
-### 10. Settings & Factor Governance
-- Configure and fine-tune GHG emission factors (Electricity, Fuel Diesel, Road, Rail, Sea, Air, Materials, Waste).
-- Inline factor editing with one-click **"Reset to Official Defaults"** (EPA / DEFRA / GLEC standards).
-- Role-Based Access Control (RBAC) persona switcher (**Administrator**, **Sustainability Manager**, **Lead ESG Auditor**).
-- Real-time system architecture and database health metadata.
+### Module I: Audit Reports & PDF Synthesis
+ReportLab-powered document generator that creates publication-quality PDF audit reports complete with Scope tables, FAIRScore shifts, and cryptographic certificates.
 
 ---
 
-## 🎯 Pre-Configured Test Scenarios in Demo Dataset
+## 10. Technologies Used
 
-The demonstration dataset includes 32+ realistic suppliers with specific test cases built-in:
-
-| Supplier Code | Company Name | Size Tier | Specific Test Scenario & Injected Anomaly |
-| :--- | :--- | :--- | :--- |
-| **S-101** | Vulcan Heavy Forgings & Castings | Large | **High-Emission Heavy Industrial:** High fuel ($145,000\text{ L}$) & electricity ($820,000\text{ kWh}$), top gross emitter. |
-| **S-102** | Apex Intermodal Freight Services | Medium | **Suspicious Inconsistent Reporting:** Disclosed $180.0\ tCO_2e$, but physical activity yields $820.0\ tCO_2e$ ($>300\%$ under-reporting). |
-| **S-103** | Global Silicon Wafer Foundry | Large | **High Volume, Clean Intensity:** High absolute emissions ($720\ tCO_2e$) due to $450,000$ units, but clean intensity ($0.0016\ t/u$). Jumps from Gross #22 to Normalized #3 (+19 rank shift). |
-| **S-104** | MicroMelt Precision Stampings | Small | **Low Volume, High Intensity:** Modest gross emissions ($175\ tCO_2e$), but outdated furnace gives dirty unit intensity ($0.0416\ t/u$). |
-| **S-105** | BioPak Compostable Solutions | Small | **Unfairly Penalized under Gross Ranking:** Small supplier producing efficiently ($0.0003\ t/u$). Ranked at the top on unit performance. |
-| **S-106** | Horizon Weaving & Textiles | Small | **Missing Operational Telemetry:** Zero electricity consumption recorded; flagged by Auditor. |
-| **S-109 / S-113** | GreenCircuit PCB / Delta Express | Medium | **Inefficient Freight Mode:** Long-haul air freight ($>3,000\text{ km}$) flagged for modal shift to rail/sea. |
+- **Frontend:** React 19, TypeScript, Tailwind CSS, Recharts, Lucide React, Vite.
+- **Backend:** Python 3.14 / 3.12, FastAPI, SQLAlchemy ORM, SQLite.
+- **Data & AI Analytics:** NumPy, Pandas, Scikit-learn, ReportLab.
+- **Cryptography:** SHA-256 (Python `hashlib`).
 
 ---
 
-## 🎬 8-Step Hackathon Demonstration Experience
+## 11. Database Design
 
-To showcase the entire system during judging:
-
-1. **Step 1: Data Ingestion** – Click **"Load Demo Dataset"** in the top header or on the Data Ingestion page to populate the 32+ supplier records.
-2. **Step 2: Executive Command Center** – Inspect the consolidated footprint ($16,776\ tCO_2e$), filter by "Automotive Parts" or "Small Tier", and observe dynamic metric recalculation.
-3. **Step 3: AI Carbon Auditor** – Review detected anomalies (Supplier S-102 reporting variance, air-freight logistics), open the review dialog, and approve/reject with auditor notes.
-4. **Step 4: FAIRScore AI** – Contrast Gross Rank vs. Normalized Rank. Point out **S-103 Global Silicon Foundry** jumping 19 positions and observe the statistical disparity audit alert.
-5. **Step 5: Carbon Twin Simulator** – Switch freight to **Rail** and move Renewable Energy to **60%**. Observe the real-time $-30.6\%$ carbon abatement and $\$42,000+$ in annual savings. Save the scenario.
-6. **Step 6: ProofChain** – Click **"Verify Ledger Integrity"** to confirm the unbroken SHA-256 cryptographic sequence. Click on a block to inspect the raw JSON telemetry evidence.
-7. **Step 7: AI Copilot** – Click the suggested prompt chip *"Why was Supplier S-102 flagged?"* and watch the copilot respond with live evidence citations.
-8. **Step 8: Download Reports** – Go to Audit Reports and click **"Download Enterprise Audit Report (PDF)"** to view the formatted executive audit document.
+```sql
+-- Core Entity Models in SQLite (carbontrack.db)
+suppliers              (id, name, code, industry, size, location, contact_email)
+operational_records    (id, supplier_id, reporting_period, production_volume, fuel_consumption,
+                        electricity_consumption, transportation_distance, transportation_mode,
+                        calculated_scope1, calculated_scope2, calculated_scope3, calculated_total_emissions,
+                        emission_intensity, data_quality_score)
+audit_findings         (id, audit_id, supplier_id, severity, category, issue_title, supporting_data,
+                        estimated_impact_tco2e, recommended_action, confidence_level, review_status)
+fairness_assessments   (id, supplier_id, size_category, industry, absolute_emissions, emission_intensity,
+                        absolute_rank, normalized_rank, rank_delta, supplier_fairness_score,
+                        peer_group_mean_intensity, statistical_disparity_flag, explanation)
+audit_evidence_blocks  (id, finding_id, sequence_index, record_hash, prev_hash, merkle_root, timestamp)
+simulation_scenarios   (id, name, description, baseline_emissions, simulated_emissions, reduction_pct,
+                        cost_impact_usd, parameter_payload)
+```
 
 ---
 
-## 🚀 Installation & Local Execution
+## 12. Methodology
+
+1. **Activity-Based Accounting:** Carbon is computed strictly as $\text{Activity Data} \times \text{Certified Factor}$, never estimated from financial spend.
+2. **Peer Group Benchmarking:** Suppliers are partitioned into 5 industry cohorts (Machinery, Electronics, Automotive, Packaging, Logistics).
+3. **Statistical Dispersion:** Within each cohort, unit intensity distributions ($\mu, \sigma$) are computed to identify outliers exceeding $2.0$ standard deviations.
+4. **Volume Normalization:** Supplier rankings are computed twice—first on raw gross emissions, then on unit intensity—to generate objective rank deltas.
+5. **Cryptographic Sealing:** Every audit finding is hashed and sequentially linked to guarantee audit trail immutability.
+
+---
+
+## 13. Implementation Details
+
+- **Backend Architecture:** REST API structured with modular routers under `backend/app/api/` and service engines under `backend/app/services/`.
+- **Database Persistence:** Real disk persistence at `backend/data/carbontrack.db` (237 KB).
+- **Frontend Architecture:** Single Page Application (SPA) with tabbed navigation, role persona switcher (Admin, Sustainability Manager, Auditor), and modal guidance.
+
+---
+
+## 14. Results and Observations
+
+- **Portfolio Footprint:** Consolidated $16,776.04\ tCO_2e$ across 32 active suppliers.
+  - Scope 1: $4,740.38\ tCO_2e$ ($28.3\%$)
+  - Scope 2: $5,010.77\ tCO_2e$ ($29.9\%$)
+  - Scope 3: $7,024.88\ tCO_2e$ ($41.9\%$)
+- **Scale Bias Proof:** MicroMelt Precision Stampings (Small) had low gross emissions ($183\ tCO_2e$, rank #7), but the worst unit intensity ($0.0366\ tCO_2e/\text{unit}$), dropping to rank #32 under FAIRScore. Oceanic Bulk Marine (Large) had high gross emissions ($980\ tCO_2e$, rank #25), but world-class efficiency ($0.0017\ tCO_2e/\text{unit}$), jumping to rank #5 ($+20$ equity gain).
+- **Simulation Impact:** Logistics modal shift to rail + 60% solar achieves $-30.6\%$ emissions reduction ($-5,134.9\ tCO_2e$) and $+\$42,500$ annual net savings.
+- **ProofChain Integrity:** 21 consecutive SHA-256 blocks verified with 0 broken links; intentional tampering was detected immediately.
+
+---
+
+## 15. Limitations
+
+1. **Static Emission Factors:** Emission factors are configurable but static per reporting cycle; dynamic real-time grid carbon intensity is not integrated.
+2. **Single Database Node:** Prototype runs on SQLite; production multi-tenant deployment would require migration to PostgreSQL.
+3. **Deterministic Copilot Engine:** The NLP engine uses rule-based semantic slot matching; complex colloquial phrasing outside sustainability vocabulary requires standardized prompt queries.
+
+---
+
+## 16. Future Scope
+
+1. **IoT Sensor Ingestion:** Direct integration with smart factory power meters and telematics OBD-II devices for real-time telemetry.
+2. **PostgreSQL & TimescaleDB Migration:** Enable sub-hourly time-series carbon auditing for enterprise IoT streams.
+3. **Large Language Model (LLM) Integration:** Optional API connector to Gemini or local LLM for conversational multi-turn dialogue.
+4. **Multi-Tier Supply Chain Mapping:** Graph database (Neo4j) tracking Scope 3 carbon propagation from Tier-3 raw miners to Tier-1 assemblers.
+
+---
+
+## 17. Installation and Startup Instructions
 
 ### Prerequisites
-- Python 3.10+ (Python 3.14 recommended, already configured in virtual environment)
+- Python 3.12 or 3.14 (Virtual environment included in `.venv/`)
 - Node.js 18+ and npm
 
-### Quick Start (Recommended)
-
-#### Option 1: Double-Click Launcher (Windows)
-Double-click `run_all.bat` in the project root. It will automatically start both the backend API and frontend dev server in separate windows.
-
-#### Option 2: Python Unified Launcher
-Run in terminal:
+### Startup Option 1: Unified Python Launcher (Recommended)
 ```powershell
 python start_app.py
 ```
-This launches the FastAPI backend on `http://127.0.0.1:8000`, the Vite frontend on `http://localhost:5173`, and opens your browser automatically.
+*Starts FastAPI backend on port 8000 and Vite frontend on port 5173, then automatically opens the browser.*
 
-#### Option 3: Manual Step-by-Step
-
-**1. Start the Backend:**
-```powershell
-# In project root
-$env:PYTHONPATH="backend"
-.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+### Startup Option 2: Windows Batch Script
+Double-click `run_all.bat` or run in terminal:
+```cmd
+run_all.bat
 ```
-API runs at: `http://127.0.0.1:8000`  
-Swagger Docs at: `http://127.0.0.1:8000/docs`
 
-**2. Start the Frontend:**
-```powershell
-cd frontend
-npm.cmd run dev
-```
-Web app runs at: `http://localhost:5173`
+### Access URLs
+- **Academic Project Interface:** `http://localhost:5173`
+- **Backend REST API Docs (Swagger UI):** `http://127.0.0.1:8000/docs`
 
 ---
 
-## 🧪 Running Automated Tests
+## 18. Guided Project Demonstration
 
-Run the backend test suite:
-```powershell
-$env:PYTHONPATH="backend"
-.venv\Scripts\python.exe -m pytest backend/tests
-```
-All tests verify GHG Protocol calculation accuracy, ProofChain hash tamper detection, and freight modal variance.
+Click the **"Guided Project Demonstration"** button in the top navigation bar to open the 11-step evaluation walkthrough:
 
----
-
-## 🔒 Security & Data Integrity
-
-- **Zero Paid API Gatekeeping:** Full functionality runs on local mathematical heuristics and SQLite database persistence.
-- **ProofChain Tamper-Evidence:** Any unauthorized alteration to stored audit records breaks the recursive SHA-256 digest link and is immediately flagged by the verification engine.
-- **Role-Based Access Control:** Distinct workflows for Administrator, Sustainability Manager, and ESG Auditor.
-- **Safe Input Sanitization:** Robust Pydantic schema validation preventing malformed or out-of-range telemetry.
-
----
-
-## 📄 License & Attribution
-
-Developed for hackathon demonstration. All calculation methodologies conform to the **GHG Protocol Corporate Accounting and Reporting Standard (Scopes 1, 2, and 3)** and **GLEC Framework for Logistics Emissions**.
+1. **Understanding the CarbonTrack Project:** AI Foundations, system taxonomy, and problem formulation.
+2. **Loading the Demonstration Dataset:** 32 suppliers, multi-tier records, and data quality scoring.
+3. **Exploring the Carbon Footprint Dashboard:** Consolidated 16,776 tCO2e footprint and 6 interactive charts.
+4. **Performing an Automated Carbon Audit:** Rule-based anomaly detection across 20 findings.
+5. **Understanding Scope 1, 2, and 3 Emissions:** Mathematical formula transparency ($Fuel \times 2.68$, $Electricity \times 0.42$).
+6. **Examining Supplier Sustainability & FAIRScore:** Volume-normalized intensity ranking.
+7. **Understanding Statistical Bias Detection:** Statistical dispersion and rank shifts ($+20$ vs $-25$).
+8. **Running Carbon Reduction Simulations:** Modal shift to rail + solar ($-30.6\%$ cut, $\$42,500$ savings).
+9. **Verifying ProofChain Data Integrity:** SHA-256 block ledger and tamper detection.
+10. **Asking Questions through the AI Copilot:** Natural language query resolution with database citations.
+11. **Generating an Analytical PDF Report:** Exportable audit report with cryptographic seal.

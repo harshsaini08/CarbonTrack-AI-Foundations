@@ -5,6 +5,7 @@ import { DemoTourModal } from './components/DemoTourModal';
 
 // Pages
 import { ExecutiveCommandCenter } from './pages/ExecutiveCommandCenter';
+import { AIFoundationsPage } from './pages/AIFoundationsPage';
 import { SmartDataIngestion } from './pages/SmartDataIngestion';
 import { CarbonAuditor } from './pages/CarbonAuditor';
 import { SupplierIntelligence } from './pages/SupplierIntelligence';
@@ -60,6 +61,7 @@ export function App() {
         <main className="flex-1 overflow-y-auto bg-charcoal-950">
           <div key={refreshKey}>
             {currentTab === 'overview' && <ExecutiveCommandCenter />}
+            {currentTab === 'ai-foundations' && <AIFoundationsPage />}
             {currentTab === 'ingestion' && <SmartDataIngestion />}
             {currentTab === 'auditor' && <CarbonAuditor activeRole={activeRole} />}
             {currentTab === 'suppliers' && <SupplierIntelligence />}
@@ -75,7 +77,7 @@ export function App() {
         </main>
       </div>
 
-      {/* 8-Step Hackathon Evaluation Walkthrough Modal */}
+      {/* Guided Project Demonstration Modal */}
       <DemoTourModal
         isOpen={isDemoTourOpen}
         onClose={() => setIsDemoTourOpen(false)}

@@ -15,7 +15,8 @@ PYTHON_EXE = BASE_DIR / ".venv" / "Scripts" / "python.exe"
 
 def main():
     print("=" * 60)
-    print(" 🌱 CarbonTrack – Enterprise Footprint Auditor with Bias Mitigation")
+    print(" 🌱 CarbonTrack – AI-Powered Carbon Footprint Intelligence System")
+    print(" 🎓 Lovely Professional University · AI Foundations (CA)")
     print("=" * 60)
 
     # 1. Start Backend

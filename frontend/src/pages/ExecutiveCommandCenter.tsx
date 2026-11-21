@@ -12,7 +12,8 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   Layers,
-  ArrowUpRight
+  ArrowUpRight,
+  GraduationCap
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -90,7 +91,7 @@ export const ExecutiveCommandCenter: React.FC = () => {
             </span>
           </h1>
           <p className="text-xs text-charcoal-400 mt-1">
-            Real-time multi-tier carbon footprint intelligence, Scope 1-3 analytics, and supplier fairness distributions.
+            AI-powered carbon footprint intelligence, supplier sustainability analysis, and intelligent emission reduction insights.
           </p>
         </div>
 
@@ -120,6 +121,47 @@ export const ExecutiveCommandCenter: React.FC = () => {
               <option key={s} value={s}>{s === 'All' ? 'All Sizes' : `${s} Tier`}</option>
             ))}
           </select>
+        </div>
+      </div>
+
+      {/* Academic Project Identification Banner */}
+      <div className="bg-gradient-to-r from-emerald-950/40 via-charcoal-900 to-charcoal-900 border border-emerald-800/40 rounded-xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0 mt-0.5">
+            <GraduationCap className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-bold text-white">CarbonTrack</span>
+              <span className="text-[11px] text-emerald-400 font-mono bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800/60">
+                Academic Project Prototype
+              </span>
+              <span className="text-[11px] text-charcoal-500">•</span>
+              <span className="text-xs text-charcoal-300 font-medium">Artificial Intelligence Foundations (CA)</span>
+            </div>
+            <p className="text-xs text-charcoal-400 mt-1 leading-relaxed max-w-2xl">
+              <strong className="text-charcoal-300">Lovely Professional University</strong> — An intelligent carbon footprint analysis system utilizing rule-based auditing, statistical fairness normalization, what-if simulation, and natural language decision support to evaluate supply-chain sustainability.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] w-full md:w-auto shrink-0 border-t md:border-t-0 md:border-l border-charcoal-800 pt-3 md:pt-0 md:pl-4">
+          <div className="bg-charcoal-850 px-2.5 py-1.5 rounded-lg border border-charcoal-800">
+            <div className="text-[10px] text-charcoal-400 uppercase font-mono">Subject</div>
+            <div className="font-semibold text-charcoal-200">AI Foundations</div>
+          </div>
+          <div className="bg-charcoal-850 px-2.5 py-1.5 rounded-lg border border-charcoal-800">
+            <div className="text-[10px] text-charcoal-400 uppercase font-mono">Assessment</div>
+            <div className="font-semibold text-emerald-400">Continuous (CA)</div>
+          </div>
+          <div className="bg-charcoal-850 px-2.5 py-1.5 rounded-lg border border-charcoal-800">
+            <div className="text-[10px] text-charcoal-400 uppercase font-mono">Institution</div>
+            <div className="font-semibold text-charcoal-200">LPU</div>
+          </div>
+          <div className="bg-charcoal-850 px-2.5 py-1.5 rounded-lg border border-charcoal-800">
+            <div className="text-[10px] text-charcoal-400 uppercase font-mono">AI Methods</div>
+            <div className="font-semibold text-emerald-300">Rules + Stats</div>
+          </div>
         </div>
       </div>
 

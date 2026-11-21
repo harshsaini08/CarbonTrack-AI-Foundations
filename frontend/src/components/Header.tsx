@@ -7,7 +7,8 @@ import {
   Building,
   CheckCircle2,
   HelpCircle,
-  ShieldAlert
+  ShieldAlert,
+  GraduationCap
 } from 'lucide-react';
 import { Role } from '../types';
 import { api } from '../services/api';
@@ -52,27 +53,28 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="h-16 bg-charcoal-900/90 backdrop-blur-md border-b border-charcoal-800 px-6 flex items-center justify-between sticky top-0 z-30">
-      {/* Left: Organization Context */}
+      {/* Left: Academic & Institutional Context */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 text-sm text-charcoal-200">
-          <Building className="w-4 h-4 text-emerald-400" />
-          <span className="font-semibold text-white">AeroDynamics Global</span>
+          <GraduationCap className="w-4 h-4 text-emerald-400" />
+          <span className="font-semibold text-white">Lovely Professional University</span>
           <span className="text-charcoal-500">/</span>
-          <span className="text-xs bg-charcoal-800 text-charcoal-300 px-2 py-0.5 rounded border border-charcoal-700">
-            FY 2025-2026 Audit
+          <span className="text-xs bg-emerald-950/70 text-emerald-300 px-2 py-0.5 rounded border border-emerald-700/50 font-medium">
+            AI Foundations · Continuous Assessment (CA)
           </span>
         </div>
       </div>
 
       {/* Right: Actions */}
       <div className="flex items-center gap-3">
-        {/* Hackathon Demo Walkthrough Button */}
+        {/* Guided Project Demonstration Button */}
         <button
           onClick={onOpenDemoTour}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-700/60 hover:bg-emerald-900/50 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-emerald-300 bg-emerald-950/60 border border-emerald-700/60 hover:bg-emerald-900/50 transition-colors shadow-sm"
+          title="Open Guided Project Demonstration for Faculty Evaluators"
         >
           <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-          <span>8-Step Hackathon Demo</span>
+          <span>Guided Project Demonstration</span>
         </button>
 
         {/* One-Click Load Demo Dataset Button */}
